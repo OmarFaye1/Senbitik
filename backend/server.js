@@ -52,7 +52,12 @@ async function start() {
       if (isProd) console.log(`🌐 Frontend servi depuis /dist`)
     })
   } catch (err) {
-    console.error('❌ Impossible de démarrer :', err.message)
+    console.error('❌ Impossible de démarrer :', err.message || err.code || err)
+    console.error('Variables DB détectées:', {
+      host: process.env.DB_HOST || process.env.MYSQL_HOST || process.env.MYSQLHOST || '(aucune)',
+      user: process.env.DB_USER || process.env.MYSQL_USER || process.env.MYSQLUSER || '(aucun)',
+      database: process.env.DB_NAME || process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE || '(aucune)',
+    })
     process.exit(1)
   }
 }
