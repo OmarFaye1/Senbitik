@@ -1,0 +1,67 @@
+export const testimonials = [
+  {
+    id: 1,
+    name: 'Aïcha Mbaye',
+    avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&q=80',
+    location: { fr: 'Dakar, Sénégal', en: 'Dakar, Senegal' },
+    rating: 5,
+    text: {
+      fr: "Senbitik, c'est la Teranga digitale ! Le beurre de karité de Casamance est une merveille — ma peau est transformée. Je commande chaque mois et j'offre ces produits à toute ma famille. Dieuredieuf !",
+      en: "Senbitik is digital Teranga! The Casamance shea butter is a wonder — my skin is transformed. I order every month and give these products to all my family. Dieuredieuf!",
+    },
+    product: 'Beurre de Karité Casamance',
+    date: '2024-03-10',
+  },
+  {
+    id: 2,
+    name: 'François Dubois',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80',
+    location: { fr: 'Paris, France', en: 'Paris, France' },
+    rating: 5,
+    text: {
+      fr: "Je vis à Paris mais mes racines sont au Sénégal. Senbitik me permet de retrouver les saveurs de mon enfance — le bissap séché, le sel de Saint-Louis... C'est comme un voyage à chaque commande.",
+      en: "I live in Paris but my roots are in Senegal. Senbitik lets me find the flavors of my childhood — dried bissap, Saint-Louis salt... It's like a journey with every order.",
+    },
+    product: 'Bissap Séché Premium',
+    date: '2024-02-18',
+  },
+  {
+    id: 3,
+    name: 'Rokhaya Faye',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80',
+    location: { fr: 'Saint-Louis, Sénégal', en: 'Saint-Louis, Senegal' },
+    rating: 5,
+    text: {
+      fr: "Je suis de Saint-Louis et je suis fière de voir nos bijoux traditionnels valorisés comme ça. Le collier en or de l'Atelier Touré est une pièce d'exception. Merci Senbitik de promouvoir notre patrimoine !",
+      en: "I'm from Saint-Louis and I'm proud to see our traditional jewelry valued this way. The Atelier Touré gold necklace is an exceptional piece. Thank you Senbitik for promoting our heritage!",
+    },
+    product: 'Collier en Or de Saint-Louis',
+    date: '2024-03-22',
+  },
+  {
+    id: 4,
+    name: 'Sophie Martin',
+    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80',
+    location: { fr: 'Lyon, France', en: 'Lyon, France' },
+    rating: 5,
+    text: {
+      fr: "Le tissu wax imprimé est absolument magnifique. Les couleurs sont encore plus vives en vrai ! Ma couturière a adoré la qualité. J'en ai commandé deux autres coloris. Un service client au top !",
+      en: "The printed wax fabric is absolutely gorgeous. The colors are even more vibrant in person! My seamstress loved the quality. I ordered two more colorways. Top-notch customer service!",
+    },
+    product: 'Tissu Wax Imprimé 6 Yards',
+    date: '2024-02-05',
+  },
+  {
+    id: 5,
+    name: 'Ousmane Diatta',
+    avatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&q=80',
+    location: { fr: 'Ziguinchor, Casamance', en: 'Ziguinchor, Casamance' },
+    rating: 5,
+    text: {
+      fr: "Le Coffret Teranga est le cadeau idéal que j'offre à mes amis et partenaires étrangers. Il représente parfaitement la richesse et la générosité sénégalaise. Un concept formidable qui nous rend fiers !",
+      en: "The Teranga Gift Box is the perfect gift I give to my foreign friends and partners. It perfectly represents the richness and Senegalese generosity. A wonderful concept that makes us proud!",
+    },
+    product: 'Coffret Teranga — 9 produits',
+    date: '2024-03-15',
+  },
+]
