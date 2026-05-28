@@ -26,7 +26,7 @@ const DEMO_USERS = [
     avatar: 'https://ui-avatars.com/api/?name=Admin+Senbitik&background=C4603B&color=fff&size=100',
     role: 'admin',
     createdAt: '2023-01-01',
-    phone: '+221 33 820 00 00',
+    phone: '+221 76 396 16 32',
     address: { city: 'Dakar', quartier: 'Plateau' },
   },
 ]

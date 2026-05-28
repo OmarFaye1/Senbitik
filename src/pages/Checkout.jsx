@@ -39,7 +39,7 @@ export default function Checkout() {
     setLoading(true)
     const id = generateOrderId()
     try {
-      await fetch('/api/orders', {
+      const res = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -53,8 +53,18 @@ export default function Checkout() {
           total,
         }),
       })
-    } catch {
-      // Si le backend est indisponible on continue quand même
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || 'Erreur serveur')
+      }
+    } catch (err) {
+      setLoading(false)
+      toast.error(
+        lang === 'fr'
+          ? `Impossible d'enregistrer la commande : ${err.message}`
+          : `Could not place order: ${err.message}`
+      )
+      return
     }
     setOrderId(id)
     clearCart()
