@@ -1,10 +1,6 @@
-# Natamansa — Le terroir à portée de clic
+# Senbitik — Le terroir à portée de clic
 
-Plateforme e-commerce dédiée aux produits locaux africains : artisanat, alimentation, textile et cosmétiques naturels.
-
-## Présentation
-
-**Natamansa** (qui signifie "ce qui appartient au peuple" en Bambara) est une application web e-commerce complète valorisant les produits du terroir et les producteurs locaux africains. La plateforme connecte des artisans, agriculteurs et producteurs locaux avec des consommateurs du monde entier.
+Plateforme e-commerce dédiée aux produits locaux sénégalais : artisanat, alimentation, textile et cosmétiques naturels.
 
 ## Stack Technique
 
@@ -14,154 +10,73 @@ Plateforme e-commerce dédiée aux produits locaux africains : artisanat, alimen
 | React Router v6 | Routing côté client |
 | Tailwind CSS 3 | Styles & design system |
 | Framer Motion | Animations |
-| Lucide React | Icônes |
-| Sonner | Notifications toast |
-| Context API | Gestion d'état (Auth, Cart, Theme, Lang) |
+| Node.js + Express | Backend API REST |
+| MySQL 8 | Base de données |
 
 ## Installation
 
 ```bash
 # Cloner le dépôt
-git clone <repo-url>
-cd natamansa
+git clone https://github.com/OmarFaye1/Senbitik.git
+cd Senbitik
 
-# Installer les dépendances
+# Frontend
 npm install
-
-# Lancer le serveur de développement
 npm run dev
 
-# Build de production
-npm run build
-
-# Prévisualiser le build
-npm run preview
+# Backend
+cd backend
+cp .env.example .env   # remplir les variables
+npm install
+node server.js
 ```
 
-L'application démarre sur **http://localhost:3000**
+Frontend : **http://localhost:3000** — Backend : **http://localhost:3001**
 
-## Compte démo
+## Comptes
 
-| Champ | Valeur |
-|---|---|
-| Email | `demo@natamansa.com` |
-| Mot de passe | `demo1234` |
+| Rôle | Email | Mot de passe |
+|---|---|---|
+| Admin | `admin@senbitik.com` | `admin1234` |
+| Client | `client@senbitik.com` | `client1234` |
 
-## Structure du Projet
+## Structure
 
 ```
-natamansa/
-├── public/
-│   └── favicon.svg
+senbitik/
 ├── src/
-│   ├── components/         # Composants réutilisables
-│   │   ├── Navbar.jsx
-│   │   ├── Footer.jsx
-│   │   ├── CartDrawer.jsx
-│   │   ├── Logo.jsx
-│   │   ├── ProductCard.jsx
-│   │   ├── ProducerCard.jsx
-│   │   ├── CategoryCard.jsx
-│   │   ├── TestimonialCard.jsx
-│   │   ├── StarRating.jsx
-│   │   ├── Skeleton.jsx
-│   │   └── Newsletter.jsx
-│   ├── context/            # Gestion d'état globale
-│   │   ├── AuthContext.jsx
-│   │   ├── CartContext.jsx
-│   │   ├── ThemeContext.jsx
-│   │   └── LanguageContext.jsx
-│   ├── data/               # Données mock
-│   │   ├── products.js     # 22 produits
-│   │   ├── categories.js   # 5 catégories
-│   │   ├── producers.js    # 5 producteurs
-│   │   └── testimonials.js # 5 témoignages
-│   ├── hooks/
-│   │   └── useWishlist.js
-│   ├── pages/
-│   │   ├── Home.jsx        # Page d'accueil
-│   │   ├── Shop.jsx        # Catalogue avec filtres
-│   │   ├── ProductDetail.jsx
-│   │   ├── Cart.jsx
-│   │   ├── Checkout.jsx    # Paiement multi-étapes
-│   │   ├── Login.jsx
-│   │   ├── Register.jsx
-│   │   ├── Profile.jsx     # Profil + favoris
-│   │   ├── Orders.jsx
-│   │   ├── Producers.jsx
-│   │   ├── About.jsx
-│   │   ├── Contact.jsx
-│   │   ├── FAQ.jsx
-│   │   └── NotFound.jsx
-│   ├── utils/
-│   │   └── index.js        # formatPrice, formatDate, etc.
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── index.html
-├── package.json
-├── tailwind.config.js
-├── vite.config.js
-└── postcss.config.js
+│   ├── components/     # Navbar, Footer, CartDrawer, ProductCard…
+│   ├── context/        # Auth, Cart, Theme, Language
+│   ├── pages/          # Home, Shop, Admin, Checkout…
+│   └── data/           # Producteurs, catégories, témoignages
+├── backend/
+│   ├── routes/         # products, orders, admin, upload
+│   ├── server.js
+│   └── initDB.js
+└── public/
 ```
 
 ## Fonctionnalités
 
-- **Accueil** : Hero, produits vedettes, catégories, producteurs, témoignages, newsletter
-- **Boutique** : Grille, filtres (catégorie, prix, producteur, note), recherche, tri, pagination
-- **Produit** : Galerie, description, onglets, produits similaires, ajout au panier
-- **Panier** : Drawer latéral + page dédiée, codes promo (NATAMANSA10, BIENVENUE, TERROIR)
-- **Checkout** : Adresse → Paiement → Confirmation (3 étapes)
-- **Auth** : Login/Register avec compte démo pré-rempli
-- **Profil** : Édition, favoris/wishlist, paramètres
-- **Commandes** : Historique avec détails accordéon
-- **Producteurs** : Fiches détaillées, spotlight du mois
-- **À propos / Contact / FAQ** : Pages institutionnelles complètes
-- **Mode sombre/clair** : Basculement avec persistance
-- **Multilingue FR/EN** : Toute l'interface traduite
-- **Responsive** : Mobile-first, optimisé tablette et desktop
+- Boutique avec filtres, recherche, tri
+- Prix unitaire & prix grossiste (≥ 10 unités, style Alibaba)
+- Panier avec codes promo (SENBITIK10, BIENVENUE, TERROIR)
+- Checkout invité ou connecté (Wave, Orange Money, Cash)
+- Dashboard admin — produits, commandes, stats
+- Mode sombre/clair, bilingue FR/EN
+- Responsive mobile-first
 
-## Déploiement
-
-### Vercel
-
-```bash
-npm run build
-vercel --prod
-```
-
-### Netlify
-
-```bash
-npm run build
-# Glisser le dossier dist/ sur netlify.com
-```
-
-### Variables d'environnement (pour un backend réel)
+## Variables d'environnement (backend/.env)
 
 ```env
-VITE_API_URL=https://api.natamansa.com
-VITE_STRIPE_PUBLIC_KEY=pk_live_...
-VITE_CLOUDINARY_CLOUD_NAME=natamansa
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=natamansa_db
+PORT=3001
+ADMIN_SECRET=senbitik-admin-2024
 ```
-
-## Données Mock
-
-- **22 produits** répartis en 5 catégories
-- **5 producteurs** avec histoire, certifications et galerie
-- **5 catégories** : Artisanat, Alimentation, Textile, Cosmétiques, Décoration
-- **5 témoignages** clients internationaux
-
-## Palette de Couleurs
-
-| Couleur | Hex | Usage |
-|---|---|---|
-| Terre cuite | `#C4603B` | Couleur principale |
-| Vert nature | `#4A7C59` | Couleur secondaire |
-| Or | `#D4AF37` | Accent / étoiles |
-| Beige sable | `#F5E6D3` | Fond clair |
-| Brun terre | `#3D1F0D` | Texte / fond sombre |
 
 ## Licence
 
-MIT © 2024 Natamansa
+MIT © 2024 Senbitik

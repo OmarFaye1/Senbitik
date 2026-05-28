@@ -41,7 +41,7 @@ async function seed() {
          p.stock,p.rating,p.review_count,p.tags,p.badge_fr,p.badge_en,p.featured,p.is_new,p.region_fr,p.region_en]
       )
     }
-    console.log(`✅ ${products.length} produits insérés dans natamansa_db.products`)
+    console.log(`✅ ${products.length} produits insérés dans senbitik_db.products`)
   } finally {
     conn.release()
     process.exit(0)

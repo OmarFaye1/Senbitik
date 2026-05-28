@@ -65,7 +65,14 @@
       "Bash(node -e ' *)",
       "Bash(gh --version)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git config *)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh repo *)",
+      "Bash(mv \"C:\\\\Users\\\\diouf\\\\Desktop\\\\natamansa\" \"C:\\\\Users\\\\diouf\\\\Desktop\\\\senbitik\" && echo \"OK\")",
+      "Bash(npx kill-port *)",
+      "Bash(pkill -f \"natamansa/backend/server.js\")",
+      "Bash(git push *)"
     ]
   }
 }

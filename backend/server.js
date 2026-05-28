@@ -29,7 +29,7 @@ app.use('/api/orders',        ordersRouter)
 app.use('/api/admin',         adminRouter)
 app.use('/api/admin/upload',  uploadRouter)
 
-app.get('/api/health', (_, res) => res.json({ status: 'ok', service: 'natamansa-api' }))
+app.get('/api/health', (_, res) => res.json({ status: 'ok', service: 'senbitik-api' }))
 
 // En production : sert le build React (dossier dist/ à la racine du projet)
 if (isProd) {
@@ -48,7 +48,7 @@ async function start() {
   try {
     await initDB()
     app.listen(PORT, () => {
-      console.log(`✅ Natamansa API démarrée sur http://localhost:${PORT}`)
+      console.log(`✅ Senbitik API démarrée sur http://localhost:${PORT}`)
       if (isProd) console.log(`🌐 Frontend servi depuis /dist`)
     })
   } catch (err) {

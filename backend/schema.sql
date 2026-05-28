@@ -1,6 +1,6 @@
--- Natamansa Database Schema
-CREATE DATABASE IF NOT EXISTS natamansa_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE natamansa_db;
+-- Senbitik Database Schema
+CREATE DATABASE IF NOT EXISTS senbitik_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE senbitik_db;
 
 CREATE TABLE IF NOT EXISTS products (
   id INT AUTO_INCREMENT PRIMARY KEY,
