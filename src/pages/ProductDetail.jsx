@@ -5,7 +5,7 @@ import {
   Share2, ShoppingCart, Star, Truck, X, ZoomIn
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import ProductCard from '../components/ProductCard'
 import { ProductDetailSkeleton } from '../components/Skeleton'
@@ -114,6 +114,7 @@ function Lightbox({ images, startIndex, onClose }) {
 /* ── Main page ── */
 export default function ProductDetail() {
   const { slug } = useParams()
+  const navigate = useNavigate()
   const { t, lang, getText } = useLanguage()
   const { addItem, openCart } = useCart()
   const { isInWishlist, toggleWishlist } = useWishlist()
@@ -178,7 +179,7 @@ export default function ProductDetail() {
 
   const handleBuyNow = () => {
     addItem(product, quantity, lang)
-    window.location.href = '/panier'
+    navigate('/commande')
   }
 
   const handleWishlist = () => {

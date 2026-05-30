@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Award, Leaf, ShieldCheck, Truck } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { ArrowRight, Award, Leaf, Search, ShieldCheck, Truck } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import CategoryCard from '../components/CategoryCard'
 import Newsletter from '../components/Newsletter'
 import ProducerCard from '../components/ProducerCard'
@@ -19,10 +19,54 @@ const fadeInUp = {
   transition: { duration: 0.5 },
 }
 
+/* ── Bannières hero ── */
+const BANNERS = [
+  {
+    bg: 'from-orange-600 to-amber-500',
+    img: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=700&q=80',
+    tag: { fr: 'Artisanat', en: 'Crafts' },
+    title: { fr: 'Bijoux & Artisanat\nde Saint-Louis', en: 'Jewelry & Crafts\nfrom Saint-Louis' },
+    cta: '/boutique?categorie=artisanat',
+  },
+  {
+    bg: 'from-emerald-700 to-teal-500',
+    img: 'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?w=700&q=80',
+    tag: { fr: 'Bio & Terroir', en: 'Organic' },
+    title: { fr: 'Épices & Produits\nBio de Thiès', en: 'Spices & Organic\nfrom Thiès' },
+    cta: '/boutique?categorie=alimentation',
+  },
+  {
+    bg: 'from-purple-700 to-pink-600',
+    img: 'https://images.unsplash.com/photo-1571781926291-c477ebfd024b?w=700&q=80',
+    tag: { fr: 'Cosmétiques', en: 'Cosmetics' },
+    title: { fr: 'Cosmétiques\nNaturels Casamance', en: 'Natural Cosmetics\nfrom Casamance' },
+    cta: '/boutique?categorie=cosmetiques',
+  },
+]
+
+const MINI_BANNERS = [
+  {
+    img: 'https://images.unsplash.com/photo-1558171813-1e46e59b765b?w=400&q=80',
+    label: { fr: 'Textiles Wax', en: 'Wax Textiles' },
+    cta: '/boutique?categorie=textile',
+    color: 'from-amber-800/70',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&q=80',
+    label: { fr: 'Décoration', en: 'Decoration' },
+    cta: '/boutique?categorie=decoration',
+    color: 'from-teal-800/70',
+  },
+]
+
 export default function Home() {
-  const { t, lang } = useLanguage()
+  const { t, lang, getText } = useLanguage()
+  const navigate = useNavigate()
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [newProducts, setNewProducts] = useState([])
+  const [activeBanner, setActiveBanner] = useState(0)
+  const [search, setSearch] = useState('')
+  const intervalRef = useRef(null)
 
   useEffect(() => {
     fetch('/api/products?featured=1')
@@ -35,137 +79,223 @@ export default function Home() {
       .catch(() => {})
   }, [])
 
+  /* Auto-slide banner */
+  useEffect(() => {
+    intervalRef.current = setInterval(() => setActiveBanner(i => (i + 1) % BANNERS.length), 4000)
+    return () => clearInterval(intervalRef.current)
+  }, [])
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (search.trim()) navigate(`/boutique?q=${encodeURIComponent(search.trim())}`)
+    else navigate('/boutique')
+  }
+
   const stats = [
-    { value: '50+', label: t.hero.stat1 },
-    { value: '200+', label: t.hero.stat2 },
+    { value: '50+',   label: t.hero.stat1 },
+    { value: '200+',  label: t.hero.stat2 },
     { value: '5000+', label: t.hero.stat3 },
-    { value: '12', label: t.hero.stat4 },
+    { value: '12',    label: t.hero.stat4 },
   ]
 
   const values = [
-    { icon: Leaf, title: lang === 'fr' ? '100% Naturel' : '100% Natural', desc: lang === 'fr' ? 'Produits sans additifs chimiques, issus de la nature' : 'Products without chemical additives, straight from nature' },
-    { icon: Award, title: lang === 'fr' ? 'Artisanat Certifié' : 'Certified Craftsmanship', desc: lang === 'fr' ? "Chaque artisan est sélectionné et certifié par notre équipe" : 'Each artisan is selected and certified by our team' },
-    { icon: Truck, title: lang === 'fr' ? 'Livraison Rapide' : 'Fast Delivery', desc: lang === 'fr' ? '24-48h à Dakar, 3-5 jours partout au Sénégal et en diaspora' : '24-48h in Dakar, 3-5 days across Senegal and diaspora' },
-    { icon: ShieldCheck, title: lang === 'fr' ? 'Achat Sécurisé' : 'Secure Purchase', desc: lang === 'fr' ? 'Paiement sécurisé et satisfait ou remboursé 30 jours' : 'Secure payment and 30-day money-back guarantee' },
+    { icon: Leaf,       title: lang === 'fr' ? '100% Naturel'         : '100% Natural',          desc: lang === 'fr' ? 'Produits sans additifs chimiques' : 'Products without chemical additives' },
+    { icon: Award,      title: lang === 'fr' ? 'Artisanat Certifié'   : 'Certified Crafts',       desc: lang === 'fr' ? 'Chaque artisan est sélectionné'   : 'Each artisan is hand-picked' },
+    { icon: Truck,      title: lang === 'fr' ? 'Livraison sous 24h'   : 'Delivery within 24h',    desc: lang === 'fr' ? 'Express à Dakar, 3-5j partout'    : 'Express in Dakar, 3-5d nationwide' },
+    { icon: ShieldCheck,title: lang === 'fr' ? 'Achat Sécurisé'       : 'Secure Purchase',        desc: lang === 'fr' ? 'Satisfait ou remboursé 30 jours'  : '30-day money-back guarantee' },
   ]
+
+  const banner = BANNERS[activeBanner]
 
   return (
     <main>
-      {/* ── HERO ── */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-sand-100 via-sand-50 to-white dark:from-earth-950 dark:via-earth-900 dark:to-earth-950">
-        {/* Background decoration */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-primary-100 dark:bg-primary-950/30 blur-3xl opacity-60" />
-          <div className="absolute -bottom-32 -left-32 w-80 h-80 rounded-full bg-secondary-100 dark:bg-secondary-950/30 blur-3xl opacity-40" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-accent-50 dark:bg-accent-950/10 blur-3xl opacity-30" />
-        </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 grid lg:grid-cols-2 gap-12 items-center">
-          {/* Text */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+      {/* ══════════════════════════════════════════════
+          HERO — barre de recherche + bannières
+      ══════════════════════════════════════════════ */}
+      <section className="bg-white dark:bg-earth-950">
+
+        {/* Barre orange top avec search */}
+        <div className="bg-gradient-to-r from-orange-600 to-amber-500 py-8 sm:py-12">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <motion.p
+              initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.4 }}
+              className="text-orange-100 text-sm font-medium mb-3 flex items-center justify-center gap-2"
             >
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-400 text-sm font-semibold mb-6">
-                <span className="w-2 h-2 rounded-full bg-primary-500 animate-pulse-slow" />
-                {t.hero.badge}
-              </span>
-            </motion.div>
+              <span className="inline-block w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              🇸🇳 {t.hero.badge}
+            </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold leading-[1.1] mb-6"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-white text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-2"
             >
-              <span className="text-earth-900 dark:text-sand-100">{t.hero.title}</span>
-              <br />
-              <span className="text-gradient">{t.hero.titleHighlight}</span>
+              {t.hero.title}
             </motion.h1>
-
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-lg text-earth-600 dark:text-earth-300 leading-relaxed mb-8 max-w-lg"
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="text-orange-100 text-lg sm:text-xl font-medium mb-6"
             >
-              {t.hero.subtitle}
+              {t.hero.titleHighlight}
             </motion.p>
 
-            <motion.div
+            {/* Search bar */}
+            <motion.form
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap gap-4"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              onSubmit={handleSearch}
+              className="flex max-w-2xl mx-auto shadow-lg"
             >
-              <Link to="/boutique" className="btn-primary">
-                {t.hero.cta}
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link to="/producteurs" className="btn-outline">
-                {t.hero.ctaSecondary}
-              </Link>
-            </motion.div>
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder={lang === 'fr' ? 'Rechercher des produits sénégalais...' : 'Search Senegalese products...'}
+                  className="w-full pl-10 pr-4 py-3 sm:py-3.5 text-sm bg-white dark:bg-earth-800 text-gray-800 dark:text-gray-100 border-0 focus:outline-none"
+                />
+              </div>
+              <button
+                type="submit"
+                className="px-5 sm:px-7 py-3 sm:py-3.5 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold transition-colors flex-shrink-0"
+              >
+                {lang === 'fr' ? 'Chercher' : 'Search'}
+              </button>
+            </motion.form>
 
-            {/* Stats */}
+            {/* Stats inline */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-12 grid grid-cols-4 gap-6"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-6 flex items-center justify-center gap-4 sm:gap-8 flex-wrap"
             >
-              {stats.map((stat, i) => (
+              {stats.map((s, i) => (
                 <div key={i} className="text-center">
-                  <div className="font-serif text-2xl font-bold text-primary-600 dark:text-primary-400">
-                    {stat.value}
-                  </div>
-                  <div className="text-xs text-earth-500 dark:text-earth-400 mt-0.5">
-                    {stat.label}
-                  </div>
+                  <span className="text-white font-bold text-lg sm:text-xl">{s.value}</span>
+                  <span className="text-orange-200 text-xs sm:text-sm ml-1">{s.label}</span>
                 </div>
               ))}
             </motion.div>
           </div>
+        </div>
 
-          {/* Hero image mosaic */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="hidden lg:grid grid-cols-2 gap-4"
-          >
-            {[
-              { src: 'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80', alt: 'Artisanat', className: 'row-span-2 h-80' },
-              { src: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&q=80', alt: 'Miel', className: 'h-36' },
-              { src: 'https://images.unsplash.com/photo-1558171813-1e46e59b765b?w=400&q=80', alt: 'Textile', className: 'h-36' },
-            ].map((img, i) => (
-              <div key={i} className={`rounded-2xl overflow-hidden shadow-warm ${img.className}`}>
-                <img src={img.src} alt={img.alt} className="w-full h-full object-cover" />
+        {/* ── Raccourcis catégories ── */}
+        <div className="bg-gray-50 dark:bg-earth-900 border-b border-gray-200 dark:border-earth-700">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex gap-0 overflow-x-auto scrollbar-hide">
+              {categories.map(cat => (
+                <Link
+                  key={cat.id}
+                  to={`/boutique?categorie=${cat.id}`}
+                  className="flex-shrink-0 flex items-center gap-2 px-4 py-3 text-sm text-gray-600 dark:text-gray-400 hover:text-orange-600 dark:hover:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/20 border-b-2 border-transparent hover:border-orange-500 transition-all whitespace-nowrap"
+                >
+                  <span className="text-base">{cat.icon}</span>
+                  <span className="font-medium">{getText(cat.name)}</span>
+                </Link>
+              ))}
+              <Link
+                to="/boutique"
+                className="flex-shrink-0 flex items-center gap-1 px-4 py-3 text-sm text-orange-500 font-semibold hover:bg-orange-50 dark:hover:bg-orange-950/20 border-b-2 border-transparent hover:border-orange-500 transition-all whitespace-nowrap ml-auto"
+              >
+                {lang === 'fr' ? 'Tout voir' : 'See all'}
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Bannières produits ── */}
+        <div className="max-w-7xl mx-auto px-4 py-4 sm:py-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+
+            {/* Grande bannière gauche — auto-slide */}
+            <div className="sm:col-span-2 relative rounded-xl overflow-hidden h-52 sm:h-64 cursor-pointer group"
+              onClick={() => navigate(banner.cta)}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-r ${banner.bg} transition-all duration-700`} />
+              <motion.img
+                key={activeBanner}
+                src={banner.img}
+                alt=""
+                initial={{ opacity: 0, scale: 1.05 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                className="absolute right-0 top-0 h-full w-1/2 object-cover mix-blend-multiply opacity-70"
+              />
+              <div className="relative z-10 p-5 sm:p-7 flex flex-col justify-between h-full">
+                <span className="inline-block px-2.5 py-1 bg-white/20 text-white text-xs font-semibold rounded-full w-fit">
+                  {banner.tag[lang]}
+                </span>
+                <div>
+                  <h2 className="text-white text-xl sm:text-2xl font-bold leading-snug mb-3 whitespace-pre-line">
+                    {banner.title[lang]}
+                  </h2>
+                  <button className="px-4 py-2 bg-white text-orange-600 text-xs font-bold rounded-full hover:bg-orange-50 transition-colors flex items-center gap-1.5 w-fit">
+                    {lang === 'fr' ? 'Découvrir' : 'Explore'} <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
-            ))}
-          </motion.div>
+
+              {/* Indicateurs */}
+              <div className="absolute bottom-3 right-3 flex gap-1.5 z-10">
+                {BANNERS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={e => { e.stopPropagation(); setActiveBanner(i); clearInterval(intervalRef.current) }}
+                    className={`w-1.5 h-1.5 rounded-full transition-all ${i === activeBanner ? 'bg-white w-4' : 'bg-white/50'}`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Deux mini bannières droite */}
+            <div className="flex sm:flex-col gap-3">
+              {MINI_BANNERS.map((mb, i) => (
+                <Link
+                  key={i}
+                  to={mb.cta}
+                  className="relative flex-1 rounded-xl overflow-hidden h-28 sm:h-auto group"
+                >
+                  <img src={mb.img} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${mb.color} to-transparent`} />
+                  <span className="absolute bottom-2.5 left-3 text-white text-sm font-bold">
+                    {mb.label[lang]}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── VALUES ── */}
-      <section className="py-12 bg-white dark:bg-earth-900 border-y border-sand-200 dark:border-earth-800">
+      {/* ══════════════════════════════════════════════
+          VALEURS — bande de confiance
+      ══════════════════════════════════════════════ */}
+      <section className="py-8 bg-white dark:bg-earth-900 border-y border-gray-200 dark:border-earth-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             {values.map((v, i) => (
               <motion.div
                 key={i}
                 {...fadeInUp}
-                transition={{ ...fadeInUp.transition, delay: i * 0.08 }}
-                className="flex flex-col items-center text-center gap-3"
+                transition={{ ...fadeInUp.transition, delay: i * 0.07 }}
+                className="flex items-center gap-3"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary-50 dark:bg-primary-950 flex items-center justify-center">
-                  <v.icon className="w-6 h-6 text-primary-500" />
+                <div className="w-10 h-10 rounded-lg bg-orange-50 dark:bg-orange-950/30 flex items-center justify-center flex-shrink-0">
+                  <v.icon className="w-5 h-5 text-orange-500" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-earth-900 dark:text-sand-100 text-sm">{v.title}</h3>
-                  <p className="text-xs text-earth-500 dark:text-earth-400 mt-1 leading-relaxed">{v.desc}</p>
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-200 leading-tight">{v.title}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-tight mt-0.5 hidden sm:block">{v.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -173,42 +303,46 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FEATURED PRODUCTS ── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* ══════════════════════════════════════════════
+          PRODUITS EN VEDETTE
+      ══════════════════════════════════════════════ */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-earth-950">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeInUp} className="flex items-end justify-between mb-10">
+          <motion.div {...fadeInUp} className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="section-title">{t.sections.featuredProducts}</h2>
-              <p className="section-subtitle mt-2">{t.sections.featuredSubtitle}</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {t.sections.featuredProducts}
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.sections.featuredSubtitle}</p>
             </div>
-            <Link to="/boutique" className="hidden sm:flex items-center gap-2 text-primary-500 font-semibold text-sm hover:gap-3 transition-all">
+            <Link to="/boutique" className="flex items-center gap-1.5 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
               {t.common.seeAll} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4">
             {featuredProducts.map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} />
             ))}
           </div>
-
-          <div className="mt-8 sm:hidden text-center">
-            <Link to="/boutique" className="btn-outline">
-              {t.common.seeAll} <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* ── CATEGORIES ── */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-sand-50 dark:bg-earth-900">
+      {/* ══════════════════════════════════════════════
+          CATÉGORIES
+      ══════════════════════════════════════════════ */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-white dark:bg-earth-900">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeInUp} className="text-center mb-10">
-            <h2 className="section-title">{t.sections.categories}</h2>
-            <p className="section-subtitle mt-2">{t.sections.categoriesSubtitle}</p>
+          <motion.div {...fadeInUp} className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {t.sections.categories}
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.sections.categoriesSubtitle}</p>
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {categories.map((cat, i) => (
               <CategoryCard key={cat.id} category={cat} index={i} />
             ))}
@@ -216,20 +350,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── PRODUCERS ── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* ══════════════════════════════════════════════
+          PRODUCTEURS
+      ══════════════════════════════════════════════ */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-earth-950">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeInUp} className="flex items-end justify-between mb-10">
+          <motion.div {...fadeInUp} className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="section-title">{t.sections.producers}</h2>
-              <p className="section-subtitle mt-2">{t.sections.producersSubtitle}</p>
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {t.sections.producers}
+              </h2>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.sections.producersSubtitle}</p>
             </div>
-            <Link to="/producteurs" className="hidden sm:flex items-center gap-2 text-primary-500 font-semibold text-sm hover:gap-3 transition-all">
+            <Link to="/producteurs" className="flex items-center gap-1.5 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
               {t.common.seeAll} <ArrowRight className="w-4 h-4" />
             </Link>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {producers.slice(0, 3).map((producer, i) => (
               <ProducerCard key={producer.id} producer={producer} index={i} />
             ))}
@@ -237,21 +375,27 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── NEW ARRIVALS ── */}
+      {/* ══════════════════════════════════════════════
+          NOUVEAUTÉS
+      ══════════════════════════════════════════════ */}
       {newProducts.length > 0 && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-secondary-50 to-sand-50 dark:from-secondary-950/20 dark:to-earth-900">
+        <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-white dark:bg-earth-900">
           <div className="max-w-7xl mx-auto">
-            <motion.div {...fadeInUp} className="flex items-end justify-between mb-10">
+            <motion.div {...fadeInUp} className="flex items-center justify-between mb-6">
               <div>
-                <span className="badge-secondary text-sm mb-2 inline-block">✨ {lang === 'fr' ? 'Tout nouveaux' : 'Brand new'}</span>
-                <h2 className="section-title">{t.sections.newArrivals}</h2>
+                <span className="inline-block px-2.5 py-0.5 bg-orange-100 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 text-xs font-semibold rounded-full mb-2">
+                  ✨ {lang === 'fr' ? 'Tout nouveaux' : 'Brand new'}
+                </span>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {t.sections.newArrivals}
+                </h2>
               </div>
-              <Link to="/boutique?filter=nouveau" className="hidden sm:flex items-center gap-2 text-secondary-600 font-semibold text-sm hover:gap-3 transition-all">
+              <Link to="/boutique" className="flex items-center gap-1.5 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
                 {t.common.seeAll} <ArrowRight className="w-4 h-4" />
               </Link>
             </motion.div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {newProducts.map((product, i) => (
                 <ProductCard key={product.id} product={product} index={i} />
               ))}
@@ -260,17 +404,19 @@ export default function Home() {
         </section>
       )}
 
-      {/* ── TESTIMONIALS ── */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* ══════════════════════════════════════════════
+          TÉMOIGNAGES
+      ══════════════════════════════════════════════ */}
+      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-earth-950">
         <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeInUp} className="text-center mb-10">
-            <h2 className="section-title">{t.sections.testimonials}</h2>
-            <p className="section-subtitle mt-2">{t.sections.testimonialsSubtitle}</p>
+          <motion.div {...fadeInUp} className="text-center mb-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">{t.sections.testimonials}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{t.sections.testimonialsSubtitle}</p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {testimonials.slice(0, 3).map((t, i) => (
-              <TestimonialCard key={t.id} testimonial={t} index={i} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {testimonials.slice(0, 3).map((item, i) => (
+              <TestimonialCard key={item.id} testimonial={item} index={i} />
             ))}
           </div>
         </div>

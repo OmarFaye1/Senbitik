@@ -1,7 +1,8 @@
 require('dotenv').config({ path: require('path').join(__dirname, '.env') })
-const express  = require('express')
-const cors     = require('cors')
-const path     = require('path')
+const express     = require('express')
+const cors        = require('cors')
+const path        = require('path')
+const compression = require('compression')
 const initDB   = require('./initDB')
 
 const ordersRouter   = require('./routes/orders')
@@ -14,6 +15,7 @@ const PORT   = process.env.PORT || 3001
 const isProd = process.env.NODE_ENV === 'production'
 
 // CORS — en dev: localhost:3000 | en prod: même domaine (origin: true reflète l'origine)
+app.use(compression())
 app.use(cors({
   origin: process.env.CLIENT_URL || (isProd ? true : 'http://localhost:3000'),
   credentials: true,
