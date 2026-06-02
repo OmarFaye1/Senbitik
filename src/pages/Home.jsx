@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Award, Leaf, Search, ShieldCheck, Truck } from 'lucide-react'
+import { ArrowRight, Award, Leaf, Search, ShieldCheck, ShoppingBag, Truck } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import CategoryCard from '../components/CategoryCard'
@@ -397,6 +397,23 @@ export default function Home() {
 
       {/* ── NEWSLETTER ── */}
       <Newsletter />
+
+      {/* ── BOUTON FLOTTANT ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.8 }}
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40"
+      >
+        <Link
+          to="/boutique"
+          className="flex items-center gap-2.5 px-6 py-3.5 bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-semibold text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-200 whitespace-nowrap"
+        >
+          <ShoppingBag className="w-4 h-4" />
+          {lang === 'fr' ? 'Voir nos produits' : 'Browse products'}
+          <ArrowRight className="w-4 h-4" />
+        </Link>
+      </motion.div>
     </main>
   )
 }
