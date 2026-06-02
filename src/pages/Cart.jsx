@@ -82,7 +82,6 @@ export default function Cart() {
                   {item.name}
                 </Link>
                 <div className="flex items-center gap-2 mt-1 flex-wrap">
-                  <p className="text-sm text-earth-400 capitalize">{item.producer}</p>
                   {item.quantity >= 10 && item.wholesalePrice && (
                     <span className="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                       🏷️ {lang === 'fr' ? 'Prix grossiste' : 'Wholesale'}

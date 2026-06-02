@@ -100,7 +100,6 @@ export const filterProducts = (products, filters) => {
     if (filters.category && filters.category !== 'all' && product.category !== filters.category) return false
     if (filters.minPrice && product.price < filters.minPrice) return false
     if (filters.maxPrice && product.price > filters.maxPrice) return false
-    if (filters.producer && product.producer !== filters.producer) return false
     if (filters.rating && product.rating < filters.rating) return false
     if (filters.search) {
       const query = filters.search.toLowerCase()

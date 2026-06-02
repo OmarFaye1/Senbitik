@@ -20,7 +20,6 @@ const Login = lazy(() => import('./pages/Login'))
 const Register = lazy(() => import('./pages/Register'))
 const Profile = lazy(() => import('./pages/Profile'))
 const Orders = lazy(() => import('./pages/Orders'))
-const Producers = lazy(() => import('./pages/Producers'))
 const About = lazy(() => import('./pages/About'))
 const Contact = lazy(() => import('./pages/Contact'))
 const FAQ = lazy(() => import('./pages/FAQ'))
@@ -106,8 +105,6 @@ function AppLayout() {
             <Route path="/profil" element={<CustomerRoute><Profile /></CustomerRoute>} />
             <Route path="/commandes" element={<CustomerRoute><Orders /></CustomerRoute>} />
             <Route path="/favoris" element={<CustomerRoute><Profile /></CustomerRoute>} />
-            <Route path="/producteurs" element={<CustomerRoute><Producers /></CustomerRoute>} />
-            <Route path="/producteurs/:slug" element={<CustomerRoute><Producers /></CustomerRoute>} />
             <Route path="/a-propos" element={<CustomerRoute><About /></CustomerRoute>} />
             <Route path="/contact" element={<CustomerRoute><Contact /></CustomerRoute>} />
             <Route path="/faq" element={<CustomerRoute><FAQ /></CustomerRoute>} />

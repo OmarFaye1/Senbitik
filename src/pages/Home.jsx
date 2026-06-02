@@ -4,12 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import CategoryCard from '../components/CategoryCard'
 import Newsletter from '../components/Newsletter'
-import ProducerCard from '../components/ProducerCard'
 import ProductCard from '../components/ProductCard'
 import TestimonialCard from '../components/TestimonialCard'
 import { useLanguage } from '../context/LanguageContext'
 import { categories } from '../data/categories'
-import { producers } from '../data/producers'
 import { testimonials } from '../data/testimonials'
 
 const fadeInUp = {
@@ -345,31 +343,6 @@ export default function Home() {
           <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             {categories.map((cat, i) => (
               <CategoryCard key={cat.id} category={cat} index={i} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════
-          PRODUCTEURS
-      ══════════════════════════════════════════════ */}
-      <section className="py-10 sm:py-14 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-earth-950">
-        <div className="max-w-7xl mx-auto">
-          <motion.div {...fadeInUp} className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {t.sections.producers}
-              </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{t.sections.producersSubtitle}</p>
-            </div>
-            <Link to="/producteurs" className="flex items-center gap-1.5 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
-              {t.common.seeAll} <ArrowRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {producers.slice(0, 3).map((producer, i) => (
-              <ProducerCard key={producer.id} producer={producer} index={i} />
             ))}
           </div>
         </div>

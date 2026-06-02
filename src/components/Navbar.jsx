@@ -37,7 +37,6 @@ export default function Navbar() {
   const navLinks = [
     { to: '/', label: t.nav.home },
     { to: '/boutique', label: t.nav.shop },
-    { to: '/producteurs', label: t.nav.producers },
     { to: '/a-propos', label: t.nav.about },
     { to: '/contact', label: t.nav.contact },
   ]

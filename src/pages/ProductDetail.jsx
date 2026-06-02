@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowLeft, ChevronLeft, ChevronRight,
-  Heart, MapPin, Minus, Package, Plus,
-  Share2, ShoppingCart, Star, Truck, X, ZoomIn
+  Heart, Minus, Package, Plus,
+  Share2, ShoppingCart, Truck, X, ZoomIn
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
@@ -13,7 +13,6 @@ import StarRating from '../components/StarRating'
 import { useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useWishlist } from '../hooks/useWishlist'
-import { producers } from '../data/producers'
 import { formatPrice, getDiscountPercent, getStockStatus } from '../utils'
 
 /* ── Lightbox ── */
@@ -165,8 +164,7 @@ export default function ProductDetail() {
   )
   if (notFound || !product) return <Navigate to="/boutique" replace />
 
-  const producer = product.producer !== 'anonyme' ? producers.find(p => p.id === product.producer) : null
-  const inWishlist = isInWishlist(product.id)
+const inWishlist = isInWishlist(product.id)
   const discountPct = getDiscountPercent(product.originalPrice, product.price)
   const stockStatus = getStockStatus(product.stock, lang)
   const isOutOfStock = product.stock === 0
@@ -400,24 +398,6 @@ export default function ProductDetail() {
             )}
           </div>
 
-          {/* Producer card */}
-          {producer && (
-            <Link
-              to={`/producteurs/${producer.slug}`}
-              className="flex items-center gap-3 p-3 rounded-xl bg-sand-50 dark:bg-earth-900 hover:bg-sand-100 dark:hover:bg-earth-800 transition-colors border border-sand-100 dark:border-earth-800"
-            >
-              <img src={producer.avatar} alt={producer.name} className="w-10 h-10 rounded-xl object-cover" />
-              <div className="min-w-0 flex-1">
-                <p className="text-xs text-earth-400 dark:text-earth-500">{t.product.producerOf}</p>
-                <p className="font-semibold text-sm text-earth-800 dark:text-sand-200 truncate">{producer.name}</p>
-                <div className="flex items-center gap-1 text-xs text-earth-400">
-                  <MapPin className="w-3 h-3" />
-                  {getText(producer.location)}
-                </div>
-              </div>
-              <Star className="w-4 h-4 text-accent-500 fill-current ml-auto flex-shrink-0" />
-            </Link>
-          )}
 
           {/* Quantity + Actions */}
           {!isOutOfStock ? (
@@ -556,7 +536,6 @@ export default function ProductDetail() {
           {[
             { key: 'description', label: t.product.description },
             { key: 'features', label: t.product.characteristics },
-            { key: 'producer', label: lang === 'fr' ? 'Producteur' : 'Producer' },
           ].map(({ key, label }) => (
             <button
               key={key}
@@ -633,43 +612,6 @@ export default function ProductDetail() {
               </ul>
             )}
 
-            {/* Producer */}
-            {activeTab === 'producer' && producer && (
-              <div className="grid sm:grid-cols-2 gap-8 max-w-3xl">
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <img src={producer.avatar} alt={producer.name} className="w-16 h-16 rounded-2xl object-cover shadow" />
-                    <div>
-                      <h3 className="font-serif font-bold text-xl text-earth-900 dark:text-sand-100">{producer.name}</h3>
-                      <div className="flex items-center gap-1 text-sm text-earth-500">
-                        <MapPin className="w-3.5 h-3.5" />
-                        {getText(producer.location)}
-                      </div>
-                      <StarRating rating={producer.rating} size="xs" showValue count={producer.reviewCount} />
-                    </div>
-                  </div>
-                  <p className="text-earth-600 dark:text-earth-300 text-sm leading-relaxed mb-4">
-                    {getText(producer.story)}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {producer.certifications.map(cert => (
-                      <span key={cert} className="badge-secondary text-xs">{cert}</span>
-                    ))}
-                  </div>
-                  <Link to={`/producteurs/${producer.slug}`} className="btn-outline mt-4 inline-flex text-sm">
-                    {lang === 'fr' ? 'Voir le producteur' : 'View producer'}
-                  </Link>
-                </div>
-                <div className="rounded-2xl overflow-hidden h-48 sm:h-auto">
-                  <img src={producer.coverImage} alt={producer.name} className="w-full h-full object-cover" />
-                </div>
-              </div>
-            )}
-            {activeTab === 'producer' && !producer && (
-              <p className="text-earth-400 text-sm">
-                {lang === 'fr' ? 'Informations producteur non disponibles.' : 'Producer info not available.'}
-              </p>
-            )}
           </motion.div>
         </AnimatePresence>
       </motion.div>

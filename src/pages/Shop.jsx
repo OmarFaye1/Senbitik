@@ -6,7 +6,6 @@ import ProductCard from '../components/ProductCard'
 import { ProductCardSkeleton } from '../components/Skeleton'
 import { useLanguage } from '../context/LanguageContext'
 import { categories } from '../data/categories'
-import { producers } from '../data/producers'
 import { filterProducts, formatPrice, sortProducts } from '../utils'
 
 const ITEMS_PER_PAGE = 20
@@ -19,12 +18,11 @@ export default function Shop() {
   const [viewMode, setViewMode] = useState('grid')
   const [page, setPage] = useState(1)
   const [showMobileFilters, setShowMobileFilters] = useState(false)
-  const [expanded, setExpanded] = useState({ category: true, price: true, producer: false, rating: false })
+  const [expanded, setExpanded] = useState({ category: true, price: true, rating: false })
 
   const [filters, setFilters] = useState({
     search: searchParams.get('q') || '',
     category: searchParams.get('categorie') || 'all',
-    producer: searchParams.get('producteur') || '',
     minPrice: '',
     maxPrice: '',
     rating: 0,
@@ -62,10 +60,10 @@ export default function Shop() {
 
   const updateFilter = (key, value) => setFilters(prev => ({ ...prev, [key]: value }))
   const resetFilters = () => {
-    setFilters({ search: '', category: 'all', producer: '', minPrice: '', maxPrice: '', rating: 0 })
+    setFilters({ search: '', category: 'all', minPrice: '', maxPrice: '', rating: 0 })
     setSortBy('featured')
   }
-  const hasActiveFilters = filters.category !== 'all' || filters.producer || filters.minPrice || filters.maxPrice || filters.rating > 0
+  const hasActiveFilters = filters.category !== 'all' || filters.minPrice || filters.maxPrice || filters.rating > 0
 
   const toggleSection = (key) => setExpanded(prev => ({ ...prev, [key]: !prev[key] }))
 
@@ -175,46 +173,6 @@ export default function Shop() {
                 </button>
               </div>
             )}
-          </div>
-        )}
-      </div>
-
-      {/* Producer / Supplier */}
-      <div className="border border-gray-200 dark:border-earth-700 mb-3">
-        <button
-          onClick={() => toggleSection('producer')}
-          className="w-full flex items-center justify-between px-3 py-2.5 text-sm font-semibold text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-earth-800 hover:bg-gray-100 dark:hover:bg-earth-750"
-        >
-          {lang === 'fr' ? 'Fournisseur' : 'Supplier'}
-          {expanded.producer
-            ? <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
-            : <ChevronRight className="w-3.5 h-3.5 text-gray-400" />}
-        </button>
-        {expanded.producer && (
-          <div className="py-1">
-            <button
-              onClick={() => updateFilter('producer', '')}
-              className={`w-full text-left px-3 py-1.5 text-sm transition-colors ${
-                !filters.producer
-                  ? 'text-orange-600 font-semibold bg-orange-50 dark:bg-orange-950/20 border-l-2 border-orange-500'
-                  : 'text-gray-600 dark:text-gray-400 hover:text-orange-500 hover:bg-gray-50 dark:hover:bg-earth-800'
-              }`}
-            >
-              {lang === 'fr' ? 'Tous les fournisseurs' : 'All suppliers'}
-            </button>
-            {producers.map(p => (
-              <button
-                key={p.id}
-                onClick={() => updateFilter('producer', p.id)}
-                className={`w-full text-left px-3 py-1.5 text-sm transition-colors ${
-                  filters.producer === p.id
-                    ? 'text-orange-600 font-semibold bg-orange-50 dark:bg-orange-950/20 border-l-2 border-orange-500'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-orange-500 hover:bg-gray-50 dark:hover:bg-earth-800'
-                }`}
-              >
-                {p.name}
-              </button>
-            ))}
           </div>
         )}
       </div>

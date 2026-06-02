@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
-import { CheckCircle, Heart, ShoppingCart, Truck } from 'lucide-react'
+import { Heart, ShoppingCart, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { toast } from 'sonner'
 import { useCart } from '../context/CartContext'
 import { useLanguage } from '../context/LanguageContext'
 import { useWishlist } from '../hooks/useWishlist'
-import { producers } from '../data/producers'
 import { formatPrice, getDiscountPercent } from '../utils'
 import StarRating from './StarRating'
 
@@ -17,11 +16,7 @@ export default function ProductCard({ product, index = 0, listMode = false }) {
   const inWishlist = isInWishlist(product.id)
   const discountPct = getDiscountPercent(product.originalPrice, product.price)
   const isOutOfStock = product.stock === 0
-  const producer = product.producer && product.producer !== 'anonyme'
-    ? producers.find(p => p.id === product.producer)
-    : null
-
-  const handleAddToCart = (e) => {
+const handleAddToCart = (e) => {
     e.preventDefault()
     if (isOutOfStock) return
     addItem(product, 1, lang)
@@ -162,20 +157,6 @@ export default function ProductCard({ product, index = 0, listMode = false }) {
             </span>
           </div>
 
-          {/* Supplier / producer */}
-          {producer && (
-            <div className={`flex items-center gap-1 border-t border-gray-100 dark:border-earth-700 mt-auto pt-2 ${listMode ? '' : ''}`}>
-              <CheckCircle className="w-3 h-3 text-orange-500 flex-shrink-0" />
-              <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 truncate">
-                {producer.name}
-              </span>
-              {producer.location && (
-                <span className="text-[10px] text-gray-400 dark:text-gray-500 hidden sm:inline truncate">
-                  · {typeof producer.location === 'object' ? (producer.location[lang] || producer.location.fr) : producer.location}
-                </span>
-              )}
-            </div>
-          )}
         </div>
       </Link>
 

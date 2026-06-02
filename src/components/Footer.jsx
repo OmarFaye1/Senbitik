@@ -20,7 +20,6 @@ export default function Footer() {
     { to: '/boutique', label: t.footer.allProducts },
     { to: '/boutique?filter=nouveau', label: t.footer.newArrivals },
     { to: '/boutique?filter=populaire', label: t.footer.bestSellers },
-    { to: '/producteurs', label: t.nav.producers },
   ]
 
   const infoLinks = [

@@ -134,7 +134,6 @@ export default function Contact() {
                       <option value="">{lang === 'fr' ? '— Choisir un sujet —' : '— Choose a subject —'}</option>
                       <option>{lang === 'fr' ? 'Question sur un produit' : 'Product question'}</option>
                       <option>{lang === 'fr' ? 'Problème de commande' : 'Order issue'}</option>
-                      <option>{lang === 'fr' ? 'Devenir producteur partenaire' : 'Become a producer partner'}</option>
                       <option>{lang === 'fr' ? 'Presse / Partenariat média' : 'Press / Media partnership'}</option>
                       <option>{lang === 'fr' ? 'Autre demande' : 'Other inquiry'}</option>
                     </select>
